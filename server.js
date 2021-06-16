@@ -2,12 +2,13 @@ const http = require('http');
 
 const app = require('./app');
 
+require('dotenv').config();
+
 
 //DataBase connection here..........
 const mongoose = require('mongoose');
-const DB = "mongodb+srv://dbUser:root123@cluster0.qddum.mongodb.net/IMAP?retryWrites=true&w=majority"
 
-mongoose.connect(DB, {
+mongoose.connect( process.env.DATABASE_DB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
@@ -21,12 +22,12 @@ require('dotenv').config();
 const port = process.env.PORT;
 
 // send email from one gmail to another gmail................
-// const sendEmail = require('./sendEmail');
-// console.log("Email Sent ...........");
+const sendEmail = require('./sendEmail');
+console.log("Email Sent ...........");
 
 // retrive email from gmail using IMAP.............
-// const imapEmail = require('./imap');
-// console.log("...IMAP DONE.....");
+const imapEmail = require('./imap');
+console.log("...IMAP DONE.....");
 
 // create server ...........
 const server = http.createServer(app);
