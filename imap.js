@@ -2,6 +2,7 @@ var Imap = require('imap'),
   inspect = require('util').inspect;
 
 require('dotenv').config();
+
 // let mailServer1 = new Imap({
 //   user: process.env.EMAIL,
   // password: process.env.PASSWORD,
@@ -29,10 +30,11 @@ require('dotenv').config();
 
 
 var imap = new Imap({
+  
   user: process.env.EMAIL,
   password: process.env.PASSWORD,
-  host: 'imap.gmail.com',// your mail host
-  port: 993, //host port
+  host: 'imap.gmail.com',   // your mail host
+  port: 993,  //host port
   tls: true,
   tlsOptions: {
     rejectUnauthorized: false
@@ -89,3 +91,5 @@ imap.once('end', function() {
 });
 
 imap.connect();
+
+

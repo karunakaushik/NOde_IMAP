@@ -2,7 +2,7 @@ var nodemailer = require('nodemailer');
 require('dotenv').config();
 
 var transporter = nodemailer.createTransport({
-    service:'gmail',
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL,
         pass: process.env.PASSWORD,
@@ -11,16 +11,16 @@ var transporter = nodemailer.createTransport({
 
 var mailOptions = {
     from: process.env.EMAIL,
-    to : process.env.EMAIL_RECEIVE,
+    to: process.env.EMAIL_RECEIVE,
     subject: 'Email Check',
-    text : `Hello everyone, 
+    text: `Hello everyone, 
             how r u, how do u doing`
 };
-transporter.sendMail(mailOptions, function(err,info){
-    if(err){
+transporter.sendMail(mailOptions, function (err, info) {
+    if (err) {
         console.log(err);
     }
-    else{
+    else {
         console.log('Email sent : ' + info.response);
     }
 });
