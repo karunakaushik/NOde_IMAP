@@ -1,5 +1,5 @@
 const http = require('http');
-
+// const express = require('express');
 const app = require('./app');
 
 require('dotenv').config();
@@ -8,14 +8,15 @@ require('dotenv').config();
 //DataBase connection here..........
 const mongoose = require('mongoose');
 
-mongoose.connect( process.env.DATABASE_DB, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-        useFindAndModify: false
-      }).then(()=>{
+mongoose.connect(process.env.DATABASE_DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+}).then(() => {
     console.log(`...Database connected!...`)
-}).catch((err)=> console.log(`No connection!...`))
+}).catch((err) => console.log(`No connection!...`))
+
 
 // use .env file...............
 require('dotenv').config();
@@ -32,6 +33,6 @@ console.log("...IMAP DONE.....");
 // create server ...........
 const server = http.createServer(app);
 
-server.listen(port, ()=>{
+server.listen(port, () => {
     console.log(`............server is running at ${port}...... `)
 });
