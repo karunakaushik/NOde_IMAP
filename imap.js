@@ -1,3 +1,11 @@
+const express = require('express');
+const mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+//data Schema.........
+const { mailSchema } = require('./schemas/mail');
+const MailData = mongoose.model("MailData", mailSchema);
+const app = express();
+
 var Imap = require('imap'),
   inspect = require('util').inspect;
 
@@ -29,7 +37,7 @@ require('dotenv').config();
 // const password = process.env.PASSWORD;
 
 
-var imap = new Imap({
+var imap1 = new Imap({
 
   user: process.env.EMAIL,
   password: process.env.PASSWORD,
@@ -40,74 +48,88 @@ var imap = new Imap({
     rejectUnauthorized: false
   },
   authTimeout: 3000
+}).once('error', function (err) {
+  console.log('Source Server Error:- ', err);
 });
 
-function openInbox(cb) {
-  imap.openBox('INBOX', true, cb);
-}
-
-imap.once('ready', function () {
-  openInbox(function (err, box) {
+imap1.once('ready', function () {
+  imap1.openBox('INBOX', true, function (err, box) {
     if (err) throw err;
-    var f = imap.seq.fetch(box.messages.total + ':*', {
+    console.log('message', 'Server Ready');
+  });
+  setInterval(function () {
+    getEmailFromInbox(imap1);
+  }, 3000);
+
+})
+
+
+imap1.connect();
+
+let k = 0;
+
+let getEmailFromInbox = (imap) => {
+  imap.openBox('INBOX', true, function (err, box) {
+    if (err) throw err;
+    var f = imap.seq.fetch('*', {
       bodies: ['HEADER.FIELDS (FROM SUBJECT DATE)', 'TEXT'],
-      // struct: true
+      struct: true
+      
     });
 
 
     f.on('message', function (msg, seqno) {
-      console.log('Message #%d', seqno);
       var prefix = '(#' + seqno + ') ';
-      msg.on('body', function (stream, info) {
+      if (k < seqno) {
+        console.log('Message #%d', seqno);
+        
 
-        if (info.which === 'TEXT')
-          console.log(prefix + 'Body [%s] found, %d total bytes', inspect(info.which), info.size);
+        msg.on('body', function (stream, info) {
+          var buffer = '';
+          // var count = 0;
+          stream.on('data', function (chunk) {
+            // count += chunk.length;
+            buffer = chunk.toString('utf8');
+          });
 
-        var buffer = '', count = 0;
-        stream.on('data', function (chunk) {
-          count += chunk.length;
-          buffer += chunk.toString('utf8');
+          stream.once('end', function ( ) {
+            var x = JSON.stringify(buffer);
+            console.log('Data:    ', x );
+            var da = {
+              from: 'String',
+              date: 'String',
+              subject: 'String',
+              body: x
+            }
+            var myData = new MailData(da);
+            myData.save()
+            .then(data=> {
+              console.log("data saved to database");
+            })
+            .catch(err => {
+              console.log("unable to send data");
+            });
 
-          if (info.which === 'TEXT')
-            console.log(prefix + 'Body [%s] (%d/%d)', inspect(info.which), count, info.size);
-
+            
+      
+          });
         });
 
-        stream.once('end', function () {
-          if (info.which !== 'TEXT')
-            console.log(prefix + 'Parsed header: %s', inspect(Imap.parseHeader(buffer)));
-          else
-            console.log(prefix + 'Body [%s] Finished', inspect(info.which));
+        k = seqno;
 
-        });
-      });
+      }
 
-
-      msg.once('attributes', function (attrs) {
-        console.log(prefix + 'Attributes: %s', inspect(attrs, false, 8));
-      });
-      msg.once('end', function () {
-        console.log(prefix + 'Finished');
-      });
     });
+
     f.once('error', function (err) {
       console.log('Fetch error: ' + err);
     });
-    f.once('end', function () {
-      console.log('Done fetching all messages!');
-      imap.end();
-    });
+
   });
-});
 
-imap.once('error', function (err) {
-  console.log(err);
-});
+}
 
-imap.once('end', function () {
-  console.log('Connection ended');
-});
 
-imap.connect();
+
 
 
