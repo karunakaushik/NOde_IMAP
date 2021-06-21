@@ -15,11 +15,10 @@ mongoose.connect(process.env.DATABASE_DB, {
     useFindAndModify: false
 }).then(() => {
     console.log(`...Database connected!...`)
-}).catch((err) => console.log(`No connection!...`))
+}).catch((err) => console.log( err ));
 
 
 // use .env file...............
-require('dotenv').config();
 const port = process.env.PORT;
 
 // send email from one gmail to another gmail................

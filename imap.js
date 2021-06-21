@@ -93,15 +93,15 @@ let getEmailFromInbox = (imap) => {
           });
 
           stream.once('end', function ( ) {
-            var x = JSON.stringify(buffer);
-            console.log('Data:    ', x );
-            var da = {
-              from: 'String',
-              date: 'String',
-              subject: 'String',
-              body: x
-            }
-            var myData = new MailData(da);
+            // var x = JSON.stringify(buffer);
+            console.log('Data:    ', buffer );
+            // var da = {
+            //   from: 'String',
+            //   date: 'String',
+            //   subject: 'String',
+            //   body: x
+            // }
+            var myData = new MailData({buffer});
             myData.save()
             .then(data=> {
               console.log("data saved to database");

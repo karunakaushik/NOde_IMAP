@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+const axios = require('axios');
+
 //data Schema.........
 const { dataSchema } = require('./schemas/data');
 const User = mongoose.model("User", dataSchema);
@@ -15,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //hello world.......
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send("Hello Server1");
 });
 //form view.........
 app.use("/form", (req, res) => {
@@ -40,9 +42,20 @@ app.post("/addname", (req, res) => {
 });
 
 
-// app.get("/maildata", (req, res) =>{
-//     res.send()
-// })
+axios.get('http://localhost:8000/connect')
+    .then(function (response) {
+        // handle success
+        console.log(response.data);
+        console.log("connected to server2")
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    });
+
 
 
 module.exports = app;
