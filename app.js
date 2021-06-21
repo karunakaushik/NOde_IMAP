@@ -52,9 +52,20 @@ axios.get('http://localhost:8000/connect')
         // handle error
         console.log(error);
     })
-    .then(function () {
-        // always executed
-    });
+
+
+axios.post('http://localhost:8000/connect')
+    .then(function (response) {
+        // handle success
+        console.log(response.data);
+        console.log("connected to server2")
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
+
+
 
 
 

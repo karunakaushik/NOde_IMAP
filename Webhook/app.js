@@ -27,10 +27,20 @@ axios.get('http://localhost:3000/product')
         // handle error
         console.log(error);
     })
-    // .then(function () {
-    //     // always executed
-    // });
+// .then(function () {
+//     // always executed
+// });
 
+axios.post('http://localhost:3000/product')
+    .then(function (response) {
+        // handle success
+        console.log(response.data);
+        console.log("connected to server1")
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
 
 
 module.exports = app;
