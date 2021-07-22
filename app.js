@@ -28,42 +28,42 @@ app.use('/product', productRoute);
 
 
 
-// route to post data to database.......
-app.post("/addname", (req, res) => {
-    var myData = new User(req.body);
-    myData.save()
-        .then(data => {
-            res.send("Data saved to database");
-        })
-        .catch(err => {
-            res.status(400).send("unable to save to database");
-        });
+// // route to post data to database.......
+// app.post("/addname", (req, res) => {
+//     var myData = new User(req.body);
+//     myData.save()
+//         .then(data => {
+//             res.send("Data saved to database");
+//         })
+//         .catch(err => {
+//             res.status(400).send("unable to save to database");
+//         });
 
-});
-
-
-axios.get('http://localhost:8000/connect')
-    .then(function (response) {
-        // handle success
-        console.log(response.data);
-        console.log("connected to server2")
-    })
-    .catch(function (error) {
-        // handle error
-        console.log(error);
-    })
+// });
 
 
-axios.post('http://localhost:8000/connect')
-    .then(function (response) {
-        // handle success
-        console.log(response.data);
-        console.log("connected to server2")
-    })
-    .catch(function (error) {
-        // handle error
-        console.log(error);
-    })
+// axios.get('http://localhost:8000/connect')
+//     .then(function (response) {
+//         // handle success
+//         console.log(response.data);
+//         console.log("connected to server2")
+//     })
+//     .catch(function (error) {
+//         // handle error
+//         console.log(error);
+//     })
+
+
+// axios.post('http://localhost:8000/connect')
+//     .then(function (response) {
+//         // handle success
+//         console.log(response.data);
+//         console.log("connected to server2")
+//     })
+//     .catch(function (error) {
+//         // handle error
+//         console.log(error);
+//     })
 
 
 
